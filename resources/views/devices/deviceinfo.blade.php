@@ -17,7 +17,7 @@
             <h1 class="text-4xl font-bold mb-4 w-5/6">Dispositivo ({{$devices->name ?? ''}})</h1>
     
         </div>
-        <div class="grid grid-cols-4 gap-3 m-2 ">
+        <div class="grid grid-cols-6 gap-3 m-2 ">
           <div class="col-span-12 sm:col-span-2">
               <div class="p-5 relative  bg-gray-300 border border-gray-800 shadow-lg  rounded-2xl">
                
@@ -31,7 +31,7 @@
                     <a href="{{url('/devices/'.$devices->id.'/edit')}}" >
                       <div class="cursor-pointer    shadow duration-150 hover:scale-150 " >
 
-                      <svg class="w-4 h-6 text-gray-800 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
+                      <svg class="w- h-6 text-gray-800 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.418 17.861 1 20l2.139-6.418m4.279 4.279 10.7-10.7a3.027 3.027 0 0 0-2.14-5.165c-.802 0-1.571.319-2.139.886l-10.7 10.7m4.279 4.279-4.279-4.279m2.139 2.14 7.844-7.844m-1.426-2.853 4.279 4.279"/>
                       </svg>
                       </div>
@@ -72,10 +72,39 @@
                 <div class="text-2xl text-black font-medium leading-8 mt-3">ONLINE</div>
                 <div class="text-sm text-gray-500">{{$devices->ipaddresess ?? ''}}</div>
               </div>
+              
             </div>
+
+            <?php
+    // URL de la API en la Raspberry Pi
+    $apiUrl = 'http://'.$devices->ipaddresess.':5000/api/resources'; // Cambia la IP y el puerto según tu configuración
+
+    // Realizar la solicitud HTTP
+    $client = new \GuzzleHttp\Client();
+    $response = $client->get($apiUrl);
+
+    // Obtener datos de la respuesta
+    $data = json_decode($response->getBody(), true);
+?>
+            <div class="col-span-12 sm:col-span-2">
+                <div class="p-7 relative  bg-gray-300 border border-gray-800 shadow-lg  rounded-2xl">
+                 
+                  <div class="flex justify-between items-center ">
+                    <i class="fab fa-behance text-xl text-gray-400"></i>
+                  </div>
+                  <div class="text-2xl text-black">RECURSOS RASPBERRY</div>
+                  
+                  <div class="text-2xl text-black font-medium leading-8 mt-3">CPU- {{ $data['cpu_percent'] }}%</div>
+                  <div class="text-sm text-gray-500">MEMORIA RAM- {{ $data['memory_percent'] }}%      MEMORIA DISCO DURO- {{ $data['disk_percent'] }}%</div>
+                </div>
+                
+              </div>
+
            
             
           </div>
+
+          
 
           <!-- component -->
 <body class="antialiased font-sans bg-gray-200">
